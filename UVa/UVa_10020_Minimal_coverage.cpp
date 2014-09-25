@@ -1,8 +1,10 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <vector>
 using namespace std;
 
+int nCase, m, l, r;
+bool flag;
 struct node {
 	int l, r;
 	node(int l1, int r1) {
@@ -12,54 +14,70 @@ struct node {
 		return a.l < b.l;
 	}
 };
+vector <node> line, ans;
+
+void init() {
+    line.clear();
+    ans.clear();
+    flag = false;
+}
+
+void input() {
+    cin >> m;
+    while (cin >> l >> r && (l || r)) {
+        if (l < m && r > 0) {
+            line.push_back(node(l, r));
+        }
+    }
+}
+
+void work() {
+    sort(line.begin(), line.end());
+
+    if (line.empty() || line[0].l > 0) {
+        return;
+    } else {
+        int cur = 0;
+
+        for (int i = 0; i < line.size(); i++) {
+            if (line[i].l <= cur) {
+                if (ans.empty()) {
+                    ans.push_back(line[i]);
+                } else if (line[i].r > ans.back().r) {
+                    ans.back() = line[i];
+                }
+            } else {
+                cur = ans.back().r;
+                ans.push_back(line[i]);
+            }
+            if (ans.back().r >= m) {
+                flag = true;
+                return;
+            }
+        }
+    }
+}
+
+void output() {
+    if (flag) {
+        cout << ans.size() << endl;
+        for (int i = 0; i < ans.size(); i++) {
+            cout << ans[i].l << " " << ans[i].r << endl;
+        }
+    } else {
+        cout << 0 << endl;
+    }
+    if (nCase) cout << endl;
+}
 
 int main() {
-	int nCase;
+    ios::sync_with_stdio(false);
 	cin >> nCase;
 	while (nCase--) {
-		int m, l, r;
-		vector <node> line, ans;
-		cin >> m;
-		while (cin >> l >> r && (l || r)) {
-			if (l < m && r > 0) {
-				line.push_back(node(l, r));
-			}
-		}
-		sort(line.begin(), line.end());
-
-		if (line.empty() || line[0].l > 0) {
-			cout << 0 << endl;
-		} else {
-			int cur = 0;
-			bool flag = false;
-
-			for (int i = 0; i < line.size(); i++) {
-				if (line[i].l <= cur) {
-					if (ans.empty()) {
-						ans.push_back(line[i]);
-					} else if (line[i].r > ans.back().r) {
-						ans.back() = line[i];
-					}
-				} else {
-					cur = ans.back().r;
-					ans.push_back(line[i]);
-				}
-				if (ans.back().r >= m) {
-					flag = true;
-					break;
-				}
-			}
-
-			if (flag) {
-				cout << ans.size() << endl;
-				for (int i = 0; i < ans.size(); i++) {
-					cout << ans[i].l << " " << ans[i].r << endl;
-				}
-			} else {
-				cout << 0 << endl;
-			}
-		}
-		if (nCase) cout << endl;
+		init();
+		input();
+		work();
+		output();
 	}
 	return 0;
 }

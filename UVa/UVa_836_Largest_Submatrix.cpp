@@ -3,6 +3,8 @@
 using namespace std;
 
 const int MAXN = 30;
+const int INF = 10000;
+int nCase, a[MAXN][MAXN], x1, y1, x2, y2, sum, len;
 
 int MaxSum(int n, int a[MAXN], int &start, int &end) {
 	int sum = 0;
@@ -50,34 +52,40 @@ int MaxSum2(int m, int n, int a[MAXN][MAXN], int &x1, int &y1, int &x2, int &y2)
 	return sum;
 }
 
+void input() {
+    cin.ignore();
+    string line;
+    getline(cin, line);
+    len = line.length();
+    for (int i = 1; i <= len; i++) {
+        a[1][i] = line[i - 1] - '0';
+        if (a[1][i] == 0) a[1][i] = -INF;
+    }
+    for (int i = 2; i <= len; i++) {
+        getline(cin, line);
+        for (int j = 1; j <= len; j++) {
+            a[i][j] = line[j - 1] - '0';
+            if (a[i][j] == 0) a[i][j] = -INF;
+        }
+    }
+}
+
+void work() {
+    sum = MaxSum2(len, len, a, x1, y1, x2, y2);
+}
+
+void output() {
+    cout << sum << endl;
+    if (nCase) cout << endl;
+}
+
 int main() {
-	int nCase;
 	cin >> nCase;
 	cin.ignore();
 	while (nCase--) {
-		cin.ignore();
-
-		int a[MAXN][MAXN];
-		int x1, y1, x2, y2;
-
-		string line;
-		getline(cin, line);
-		int len = line.length();
-		for (int i = 1; i <= len; i++) {
-			a[1][i] = line[i - 1] - '0';
-			if (a[1][i] == 0) a[1][i] = -10000;
-		}
-		for (int i = 2; i <= len; i++) {
-			getline(cin, line);
-			for (int j = 1; j <= len; j++) {
-				a[i][j] = line[j - 1] - '0';
-				if (a[i][j] == 0) a[i][j] = -10000;
-			}
-		}
-
-		int sum = MaxSum2(len, len, a, x1, y1, x2, y2);
-		cout << sum << endl;
-		if (nCase >= 1) cout << endl;
+		input();
+		work();
+		output();
 	}
 	return 0;
 }

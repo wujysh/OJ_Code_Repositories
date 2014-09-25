@@ -1,11 +1,11 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <cstdio>
 #include <algorithm>
 #include <vector>
 using namespace std;
 
 const int MAXN = 100010;
+vector <int> ans;
+int n;
 
 struct Line {
 	double x1, y1, x2, y2, u, v;
@@ -13,7 +13,7 @@ struct Line {
 		x1 = x10;  y1 = y10;  x2 = x20;  y2 = y20;
 		u = x2 - x1;  v = y2 - y1;
 	}
-};
+} line[MAXN];
 
 double cross(Line l1, Line l2) {
 	return(l1.u*l2.v - l2.u*l1.v);
@@ -37,8 +37,6 @@ bool furtherTest(Line l1, Line l2) {  // l1:AB  l2:CD
 	return true;
 }
 
-Line line[MAXN];
-
 bool judge(Line l1, Line l2) {
 	// fast test
 	if (!fastTest(l1, l2)) {
@@ -50,41 +48,52 @@ bool judge(Line l1, Line l2) {
 	return true;
 }
 
+void init() {
+    ans.clear();
+}
+
+void input() {
+    for (int i = 0; i < n; i++) {
+        double x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        //scanf("%lf%lf%lf%lf", &x1, &y1, &x2, &y2);
+        line[i] = Line(x1, y1, x2, y2);
+    }
+}
+
+void work() {
+    for (int i = 0; i < n; i++) {
+        bool flag = false;
+        for (int j = i + 1; j < n; j++) {
+            if (!judge(line[i], line[j])) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) ans.push_back(i + 1);
+    }
+}
+
+void output() {
+    cout << "Top sticks:";
+    //printf("Top sticks:");
+    for (int i = 0; i < ans.size(); i++) {
+        if (i) cout << ",";
+        //if (i) printf(",");
+        cout << " " << ans[i];
+        //printf(" %d", ans[i]);
+    }
+    cout << "." << endl;
+    //printf(".\n");
+}
+
 int main() {
-	//freopen("output.txt", "w", stdout);
-	int n;
-	while (scanf("%d", &n) && n) {
-		vector <int> ans;
-		ans.clear();
-
-		for (int i = 0; i < n; i++) {
-			double x1, y1, x2, y2;
-			//cin >> x1 >> y1 >> x2 >> y2;
-			scanf("%lf%lf%lf%lf", &x1, &y1, &x2, &y2);
-			line[i] = Line(x1, y1, x2, y2);
-		}
-
-		for (int i = 0; i < n; i++) {
-			bool flag = false;
-			for (int j = i + 1; j < n; j++) {
-				if (!judge(line[i], line[j])) {
-					flag = true;
-					break;
-				}
-			}
-			if (!flag) ans.push_back(i + 1);
-		}
-
-		//cout << "Top sticks:";
-		printf("Top sticks:");
-		for (int i = 0; i < ans.size(); i++) {
-			//if (cnt) cout << ",";
-			if (i) printf(",");
-			//cout << " " << i + 1;
-			printf(" %d", ans[i]);
-		}
-		//cout << "." << endl;
-		printf(".\n");
+    ios::sync_with_stdio(false);
+	while (cin >> n && n) {
+		init();
+		input();
+		work();
+		output();
 	}
 	return 0;
 }

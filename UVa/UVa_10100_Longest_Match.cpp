@@ -1,60 +1,66 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <cstring>
+#include <algorithm>
+#include <vector>
 #include <string>
-#define max(a,b) ((a) > (b) ? (a): (b))
 using namespace std;
+
 const int MAXN = 1010;
-int f[MAXN][MAXN];
+vector <string> line1, line2;
+string str1, str2;
+int nCase, dp[MAXN][MAXN];
+
+void filter_and_divide(string &str, vector <string> &line) {
+    for (int i = 0; i < str.length(); i++) {
+        if (!isalpha(str[i]) && !isdigit(str[i])) {
+            str[i] = ' ';
+        }
+    }
+    stringstream ss(str);
+    string word;
+    while (ss >> word) {
+        line.push_back(word);
+    }
+}
+
+void init() {
+    nCase++;
+    line1.clear();
+    line2.clear();
+    memset(dp, 0, sizeof(dp));
+    filter_and_divide(str1, line1);
+    filter_and_divide(str2, line2);
+}
+
+void LCS() {
+    for (int i = 1; i <= line1.size(); i++) {
+        for (int j = 1; j <= line2.size(); j++) {
+            if (line1[i-1] == line2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1;
+            } else {
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+}
+
+void output() {
+    cout << setw(2) << nCase << ". ";
+    if (str1 == "" || str2 == "") {
+        cout << "Blank!" << endl;
+    } else {
+        cout << "Length of longest match: " << dp[line1.size()][line2.size()] << endl;
+    }
+}
 
 int main() {
-	string st1, st2;
-	int nCase = 0;
-	while (getline(cin, st1)) {
-		nCase++;
-		memset(f, 0, sizeof(f));
-		getline(cin, st2);
-		string a[MAXN], b[MAXN];
-		int index = 0, i = 0, cnta = 0, cntb = 0;
-		while (i < st1.length()) {
-			if (isalpha(st1[i]) || isdigit(st1[i])) {
-				i++;
-			} else {
-				a[cnta++] = st1.substr(index, i - index);
-				while (i < st1.length() && !isalpha(st1[i]) && !isdigit(st1[i])) i++;
-				index = i;
-			}
-		}
-		if (index != i) a[cnta++] = st1.substr(index, i - index);
-
-		index = 0, i = 0;
-		while (i < st2.length()) {
-			if (isalpha(st2[i]) || isdigit(st2[i])) {
-				i++;
-			} else {
-				b[cntb++] = st2.substr(index, i - index);
-				while (i < st2.length() && !isalpha(st2[i]) && !isdigit(st2[i])) i++;
-				index = i;
-			}
-		}
-		if (index != i) b[cntb++] = st2.substr(index, i - index);
-
-		for (int i = 1; i <= cnta; i++) {
-			for (int j = 1; j <= cntb; j++) {
-				if (a[i - 1] == b[j - 1]) {
-					f[i][j] = f[i - 1][j - 1] + 1;
-				} else {
-					f[i][j] = max(f[i - 1][j], f[i][j - 1]);
-				}
-			}
-		}
-
-		cout << setw(2) << nCase << ". ";
-		if (st1.length() == 0 || st2.length() == 0) {
-			cout << "Blank!" << endl;
-		} else {
-			cout << "Length of longest match: " << f[cnta][cntb] << endl;
-		}
-	}
-	return 0;
+    while (getline(cin, str1)) {
+        getline(cin, str2);
+        init();
+        LCS();
+        output();
+    }
+    return 0;
 }

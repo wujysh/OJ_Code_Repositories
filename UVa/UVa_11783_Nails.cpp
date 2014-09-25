@@ -1,10 +1,11 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <algorithm>
 #include <cstring>
 using namespace std;
 
 const int MAXN = 1010;
+int n, ans;
+bool flag[MAXN];
 
 struct Line {
 	long long x1, y1, x2, y2, u, v;
@@ -12,7 +13,7 @@ struct Line {
 		x1 = x10;  y1 = y10;  x2 = x20;  y2 = y20;
 		u = x2 - x1;  v = y2 - y1;
 	}
-};
+} line[MAXN];
 
 long long cross(Line l1, Line l2) {
 	return(l1.u*l2.v - l2.u*l1.v);
@@ -36,8 +37,6 @@ bool furtherTest(Line l1, Line l2) {  // l1:AB  l2:CD
 	return true;
 }
 
-Line line[MAXN];
-
 bool judge(Line l1, Line l2) {
 	// fast test
 	if (!fastTest(l1, l2)) {
@@ -49,31 +48,42 @@ bool judge(Line l1, Line l2) {
 	return true;
 }
 
+void init() {
+    ans = 0;
+    memset(flag, false, sizeof(flag));
+}
+
+void input() {
+    for (int i = 0; i < n; i++) {
+        long long x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        line[i] = Line(x1, y1, x2, y2);
+    }
+}
+
+void work() {
+    for (int i = 0; i < n; i++) {
+        for (int j = i+1; j < n; j++) {
+            if (!judge(line[i], line[j])) {
+                ans++;
+                flag[i] = flag[j] = true;
+            }
+        }
+        if (!flag[i]) ans += 2;
+    }
+}
+
+void output() {
+    cout << ans << endl;
+}
+
 int main() {
-	//freopen("output.txt", "w", stdout);
-	int n;
+    ios::sync_with_stdio(false);
 	while (cin >> n && n) {
-		int ans = 0;
-		for (int i = 0; i < n; i++) {
-			long long x1, y1, x2, y2;
-			cin >> x1 >> y1 >> x2 >> y2;
-			line[i] = Line(x1, y1, x2, y2);
-		}
-
-		bool flag[MAXN];
-		memset(flag, false, sizeof(flag));
-
-		for (int i = 0; i < n; i++) {
-			for (int j = i+1; j < n; j++) {
-				if (!judge(line[i], line[j])) {
-					ans++;
-					flag[i] = flag[j] = true;
-				}
-			}
-			if (!flag[i]) ans += 2;
-		}
-		
-		cout << ans << endl;
+        init();
+        input();
+        work();
+        output();
 	}
 	return 0;
 }

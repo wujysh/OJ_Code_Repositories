@@ -1,25 +1,38 @@
 #include <iostream>
 using namespace std;
 
+int nCase, s, n, maxlen, minlen;
+
+void init() {
+    maxlen = 0, minlen = 0;
+}
+
+void work() {
+    cin >> s >> n;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        x = (x < (s - x)) ? x : (s - x);
+        if (x > minlen) {
+            minlen = x;
+        }
+        if (s - x > maxlen) {
+            maxlen = s - x;
+        }
+    }
+}
+
+void output() {
+    cout << minlen << " " << maxlen << endl;
+}
+
 int main() {
-	int nCase;
+	ios::sync_with_stdio(false);
 	cin >> nCase;
 	while (nCase--) {
-		int s, n, max = 0, min = 0;
-		cin >> s >> n;
-		for (int i = 0; i < n; i++) {
-			int x;
-			cin >> x;
-			x = (x < (s - x)) ? x : (s - x);
-			if (x > min) {
-				min = x;
-			}
-			if (s - x > max) {
-				max = s - x;
-			}
-		}
-		cout << min << " " << max << endl;
-
-	}
+		init();
+		work();
+		output();
+    }
 	return 0;
 }

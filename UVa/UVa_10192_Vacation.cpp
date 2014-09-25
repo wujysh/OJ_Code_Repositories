@@ -1,29 +1,40 @@
 #include <iostream>
-#include <cstring>
 #include <string>
-#define max(a,b) ((a) > (b) ? (a): (b))
+#include <cstring>
+#include <algorithm>
 using namespace std;
 
-int f[1010][1010];
+const int MAXN = 110;
+string str1, str2;
+int nCase, dp[MAXN][MAXN];
+
+void init() {
+    nCase++;
+    memset(dp, 0, sizeof(dp));
+}
+
+void LCS() {
+    for (int i = 1; i <= str1.length(); i++) {
+        for (int j = 1; j <= str2.length(); j++) {
+            if (str1[i-1] == str2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1;
+            } else {
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+}
+
+void output() {
+    cout << "Case #" << nCase << ": you can visit at most " << dp[str1.length()][str2.length()] << " cities." << endl;
+}
 
 int main() {
-	string st1, st2;
-	int nCase = 0;
-	while (getline(cin, st1) && st1 != "#") {
-		nCase++;
-		memset(f, 0, sizeof(f));
-		getline(cin, st2);
-		for (int i = 1; i <= st1.length(); i++) {
-			for (int j = 1; j <= st2.length(); j++) {
-				if (st1[i - 1] == st2[j - 1]) {
-					f[i][j] = f[i - 1][j - 1] + 1;
-				} else {
-					f[i][j] = max(f[i - 1][j], f[i][j - 1]);
-				}
-			}
-		}
-		cout << "Case #" << nCase << ": you can visit at most ";
-		cout << f[st1.length()][st2.length()] << " cities." << endl;
-	}
-	return 0;
+    while (getline(cin, str1) && str1 != "#") {
+        getline(cin, str2);
+        init();
+        LCS();
+        output();
+    }
+    return 0;
 }

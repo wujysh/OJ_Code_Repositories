@@ -1,4 +1,3 @@
-//#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -16,7 +15,7 @@ struct Edge {
 		u = u0; v = v0; c = c0; next = next0;
 	}
 } edge[MAXN * 10];
-int head[MAXN * 2], cnt; // 前向星存储结构
+int head[MAXN * 2], cnt;
 bool visited[MAXN * 2];
 int path[MAXN * 2], from, to, maxflow, offflow, nCase, m, n, k;
 
@@ -31,7 +30,7 @@ vector <string> device;
 map <string, vector <int> > plug;
 vector <node> adapter;
 
-void initial() {
+void init() {
 	memset(head, -1, sizeof(head));
 	cnt = 0;
 	maxflow = 0;
@@ -141,14 +140,13 @@ void work() {
 void output() {
 	cout << m - maxflow << endl;
 	if (nCase) cout << endl;
-	cout << cnt << endl;
 }
 
 int main() {
-	//freopen("output.txt", "w", stdout);
+    ios::sync_with_stdio(false);
 	cin >> nCase;
 	while (nCase--) {
-		initial();
+		init();
 		input();
 		work();
 		output();

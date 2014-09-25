@@ -10,12 +10,12 @@ struct Edge {
 		u = u0; v = v0; c = c0; next = next0;
 	}
 } edge[MAXN * 10];
-int head[MAXN * 2], cnt; // ǰ���Ǵ洢�ṹ
+int head[MAXN * 2], cnt; // Ç°ÏòÐÇ´æ´¢½á¹¹
 
 bool visited[MAXN * 2];
 int path[MAXN * 2], from, to, maxflow, offflow, nCase, n;
 
-void initial() {
+void init() {
 	memset(head, -1, sizeof(head));
 	cnt = 0;
 	nCase++;
@@ -83,7 +83,7 @@ void output() {
 
 int main() {
 	while (cin >> n && n) {
-		initial();
+		init();
 		input();
 		work();
 		output();

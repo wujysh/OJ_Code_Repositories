@@ -17,7 +17,7 @@ struct Edge {
 		u = u0; v = v0; c = c0; next = next0;
 	}
 } edge[MAXN * 10];
-int head[MAXN], cnt; // ǰ���Ǵ洢�ṹ
+int head[MAXN], cnt; // Ç°ÏòÐÇ´æ´¢½á¹¹
 
 bool visited[MAXN];
 int path[MAXN], from, to, maxflow, offflow, nCase, X, Y, P;

@@ -4,6 +4,7 @@ using namespace std;
 
 const int MAXN = 110;
 const int INF = 10000;
+int a[MAXN][MAXN], x1, y1, x2, y2, p, b, s, sum;
 
 int MaxSum(int n, int a[MAXN], int &start, int &end) {
 	int sum = 0;
@@ -54,36 +55,40 @@ int MaxSum2(int m, int n, int a[MAXN][MAXN], int &x1, int &y1, int &x2, int &y2)
 	return sum;
 }
 
+void input() {
+    cin >> s;
+    for (int i = 1; i <= s; i++) {
+        for (int j = 1; j <= s; j++) {
+            a[i][j] = 1;
+        }
+    }
+
+    cin >> b;
+    while (b--) {
+        int r1, c1, r2, c2;
+        cin >> r1 >> c1 >> r2 >> c2;
+        for (int i = r1; i <= r2; i++) {
+            for (int j = c1; j <= c2; j++) {
+                a[i][j] = -INF;
+            }
+        }
+    }
+}
+
+void work() {
+    sum = MaxSum2(s, s, a, x1, y1, x2, y2);
+}
+
+void output() {
+    cout << sum << endl;
+}
+
 int main() {
-	int p;
 	cin >> p;
-	
 	while (p--) {
-		int a[MAXN][MAXN];
-		int x1, y1, x2, y2;
-		int b, s;
-
-		cin >> s;
-		for (int i = 1; i <= s; i++) {
-			for (int j = 1; j <= s; j++) {
-				a[i][j] = 1;
-			}
-		}
-
-		cin >> b;
-
-		while (b--) {
-			int r1, c1, r2, c2;
-			cin >> r1 >> c1 >> r2 >> c2;
-			for (int i = r1; i <= r2; i++) {
-				for (int j = c1; j <= c2; j++) {
-					a[i][j] = -INF;
-				}
-			}
-		}
-
-		int sum = MaxSum2(s, s, a, x1, y1, x2, y2);
-		cout << sum << endl;
+		input();
+		work();
+		output();
 	}
 	return 0;
 }

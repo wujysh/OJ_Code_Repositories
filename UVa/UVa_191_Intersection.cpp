@@ -1,7 +1,8 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <algorithm>
 using namespace std;
+
+int nCase;
 
 struct Line {
 	int x1, y1, x2, y2, u, v;
@@ -10,6 +11,7 @@ struct Line {
 		u = x2 - x1;  v = y2 - y1;
 	}
 };
+Line rectangle[4], line;
 
 int cross(Line l1, Line l2) {
 	return(l1.u*l2.v - l2.u*l1.v);
@@ -33,15 +35,13 @@ bool furtherTest(Line l1, Line l2) {  // l1:AB  l2:CD
 	return true;
 }
 
-Line rectangle[4], line;
-
 bool judge() {
 	// line in rectangle
 	if (line.x1 >= rectangle[0].x1 && line.x1 <= rectangle[1].x1 &&
 		line.x2 >= rectangle[0].x1 && line.x2 <= rectangle[1].x1 &&
 		line.y1 >= rectangle[3].y1 && line.y1 <= rectangle[2].y1 &&
 		line.y2 >= rectangle[3].y1 && line.y2 <= rectangle[2].y1) return false;
-	
+
 	// fast test
 	for (int i = 0; i < 4; i++) {
 		if (!fastTest(line, rectangle[i])) {
@@ -54,28 +54,35 @@ bool judge() {
 	return true;
 }
 
+
+void input() {
+    int xstart, ystart, xend, yend, xleft, ytop, xright, ybottom;
+    cin >> xstart >> ystart >> xend >> yend >> xleft >> ytop >> xright >> ybottom;
+
+    if (xright < xleft) swap(xleft, xright);
+    if (ybottom > ytop) swap(ybottom, ytop);
+
+    line = Line(xstart, ystart, xend, yend);
+    rectangle[0] = Line(xleft, ytop, xleft, ybottom);
+    rectangle[1] = Line(xright, ytop, xright, ybottom);
+    rectangle[2] = Line(xleft, ytop, xright, ytop);
+    rectangle[3] = Line(xleft, ybottom, xright, ybottom);
+}
+
+void output() {
+    if (judge()) {
+        cout << "F" << endl;
+    } else {
+        cout << "T" << endl;
+    }
+}
+
 int main() {
-	//freopen("output.txt", "w", stdout);
-	int nCase;
+	ios::sync_with_stdio(false);
 	cin >> nCase;
 	while (nCase--) {
-		int xstart, ystart, xend, yend, xleft, ytop, xright, ybottom;
-		cin >> xstart >> ystart >> xend >> yend >> xleft >> ytop >> xright >> ybottom;
-
-		if (xright < xleft) swap(xleft, xright);
-		if (ybottom > ytop) swap(ybottom, ytop);
-
-		line = Line(xstart, ystart, xend, yend);
-		rectangle[0] = Line(xleft, ytop, xleft, ybottom);
-		rectangle[1] = Line(xright, ytop, xright, ybottom);
-		rectangle[2] = Line(xleft, ytop, xright, ytop);
-		rectangle[3] = Line(xleft, ybottom, xright, ybottom);
-
-		if (judge()) {
-			cout << "F" << endl;
-		} else {
-			cout << "T" << endl;
-		}
+        input();
+        output();
 	}
 	return 0;
 }

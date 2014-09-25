@@ -1,58 +1,61 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>  
-#include <cstdlib>  
-#include <cstring>  
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <string>
+#include <vector>
+using namespace std;
 
-int cmp (const void *a, const void *b) 
-{ 
-	return *(int *)a - *(int *)b;
-}  
+vector <int> unsortedStack, sortedStack;
+vector <int>::iterator it;
+string line;
 
-void flip(int a[], int i, int j, int n)
-{
-	printf("%d ", n-j);
-	while (i < j) {  
-        int tmp = a[i];  
-        a[i] = a[j];  
-        a[j] = tmp;  
-        i++;  
-        j--;  
-    }  
+void init() {
+    unsortedStack.clear();
+    sortedStack.clear();
 }
-  
-int main()
-{  
-    int a[35], b[35], n;  
-  
-    while (scanf("%d", &a[0]) != EOF) {   
-        n = 1;  
-        if (getchar() != '\n')  
-            while (scanf("%d", &a[n++]))  
-                if (getchar() == '\n')  break;  
-  
-        for (int i = 0; i < n; i++) {  
-            b[i] = a[i];  
-            printf("%d ", a[i]);  
-        }  
-        printf("\n");  
-  
-        qsort(b, n, sizeof(int), cmp);  
-    
-        for (int i = n-1; i >= 0; i--) {  
-            if (a[i] == b[i])   continue;  
-            for (int j = i-1; j >= 0; j--) {  
-                if (b[i] == a[j]) {  
-                    if (j == 0) {  
-						flip(a, 0, i, n);
-                    }  
-                    else {  
-						flip(a, 0, j, n);
-						flip(a, 0, i, n);
-                    }  
-                }  
-            }  
-        }  
-        printf("0\n");  
-    }  
-    return 0;  
-}  
+
+void input() {
+    stringstream ss(line);
+    int x;
+    while (ss >> x) {
+        unsortedStack.push_back(x);
+    }
+}
+
+void output() {
+    for (int i = 0; i < unsortedStack.size(); i++) {
+        if (i) cout << " ";
+        cout << unsortedStack[i];
+    }
+    cout << endl;
+
+    sortedStack = unsortedStack;
+    sort(sortedStack.begin(), sortedStack.end());
+
+    for (int i = unsortedStack.size() - 1; i >= 0; i--) {
+        if (unsortedStack[i] != sortedStack[i]) {
+            it = find(unsortedStack.begin(), unsortedStack.end(), sortedStack[i]);
+            if (it == unsortedStack.begin()) {
+                reverse(unsortedStack.begin(), unsortedStack.begin() + i + 1);
+                cout << unsortedStack.size() - i << " ";
+            } else {
+                reverse(unsortedStack.begin(), it + 1);
+                cout << unsortedStack.end() - it << " ";
+                reverse(unsortedStack.begin(), unsortedStack.begin() + i + 1);
+                cout << unsortedStack.size() - i << " ";
+            }
+        }
+    }
+
+    cout << 0 << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+	while (getline(cin, line)) {
+		init();
+		input();
+        output();
+	}
+	return 0;
+}

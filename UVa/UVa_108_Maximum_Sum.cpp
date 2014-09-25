@@ -3,6 +3,7 @@
 using namespace std;
 
 const int MAXN = 110;
+int a[MAXN][MAXN], x1, y1, x2, y2, sum, n;
 
 int MaxSum(int n, int a[MAXN], int &start, int &end) {
 	int sum = 0;
@@ -50,20 +51,28 @@ int MaxSum2(int m, int n, int a[MAXN][MAXN], int &x1, int &y1, int &x2, int &y2)
 	return sum;
 }
 
-int main() {
-	int n;
-	while (cin >> n) {
-		int a[MAXN][MAXN];
-		int x1, y1, x2, y2;
+void input() {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+    }
+}
 
-		for (int i = 1; i <= n; i++) {
-			for (int j = 1; j <= n; j++) {
-				cin >> a[i][j];
-			}
-		}
-		int sum = MaxSum2(n, n, a, x1, y1, x2, y2);
-		cout << sum << endl;
-		//printf("(%d,%d) (%d,%d)", x1, y1, x2, y2);
+void work() {
+    sum = MaxSum2(n, n, a, x1, y1, x2, y2);
+}
+
+void output() {
+    cout << sum << endl;
+    //printf("(%d,%d) (%d,%d)", x1, y1, x2, y2);
+}
+
+int main() {
+	while (cin >> n) {
+		input();
+		work();
+		output();
 	}
 	return 0;
 }

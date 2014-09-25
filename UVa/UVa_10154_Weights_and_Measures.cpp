@@ -1,13 +1,12 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <cstring>
 #include <vector>
 using namespace std;
 
 const int MAXN = 6000;
 const int INF = 0x3f3f3f3f;
-
+int dp[MAXN][MAXN];
 struct node {
 	int w, s;
 	node(int w1, int s1) {
@@ -17,22 +16,26 @@ struct node {
 		return a.s < b.s;
 	}
 };
-
 vector <node> turtle;
-int dp[MAXN][MAXN];
 
-int main() {
-	//freopen("input.txt", "r", stdin);
-	int x, y;
-	turtle.push_back(node(0, INF));
+void init() {
+    turtle.clear();
+    turtle.push_back(node(0, INF));
+    memset(dp, 0x3f, sizeof(dp));
+    for (int i = 0; i < turtle.size(); i++) {
+        dp[i][0] = 0;
+    }
+}
+
+void input() {
+    int x, y;
 	while (cin >> x >> y) {
 		turtle.push_back(node(x, y));
 	}
+}
 
-	sort(turtle.begin() + 1, turtle.end());
-
-	memset(dp, 0x3f, sizeof(dp));
-	for (int i = 0; i < turtle.size(); i++) dp[i][0] = 0;
+void work() {
+    sort(turtle.begin() + 1, turtle.end());
 
 	for (int i = 1; i < turtle.size(); i++) {
 		for (int j = 1; j <= i; j++) {
@@ -42,16 +45,24 @@ int main() {
 			}
 		}
 	}
+}
 
-	int ans = 0;
+void output() {
+    int ans = 0;
 	for (int i = turtle.size() - 1; i >= 1; i--) {
 		if (dp[turtle.size() - 1][i] != INF) {
 			ans = i;
 			break;
 		}
 	}
-
 	cout << ans << endl;
+}
 
-	return 0;
+int main() {
+    ios::sync_with_stdio(false);
+    init();
+    input();
+    work();
+    output();
+    return 0;
 }

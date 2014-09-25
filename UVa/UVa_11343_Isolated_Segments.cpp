@@ -1,7 +1,8 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <algorithm>
 using namespace std;
+
+int nCase, n, ans;
 
 struct Line {
 	long long x1, y1, x2, y2, u, v;
@@ -10,6 +11,7 @@ struct Line {
 		u = x2 - x1;  v = y2 - y1;
 	}
 };
+Line line[110];
 
 long long cross(Line l1, Line l2) {
 	return(l1.u*l2.v - l2.u*l1.v);
@@ -33,12 +35,8 @@ bool furtherTest(Line l1, Line l2) {  // l1:AB  l2:CD
 	return true;
 }
 
-Line line[110];
-
 bool judge(Line l1, Line l2) {
-	// fast test
 	if (!fastTest(l1, l2)) {
-		// further test
 		if (!furtherTest(l1, l2)) {
 			return false;
 		}
@@ -46,31 +44,44 @@ bool judge(Line l1, Line l2) {
 	return true;
 }
 
+void init() {
+    ans = 0;
+}
+
+void input() {
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        long long x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        line[i] = Line(x1, y1, x2, y2);
+    }
+}
+
+void work() {
+    for (int i = 0; i < n; i++) {
+        bool flag = false;
+        for (int j = 0; j < n; j++) {
+            if (i != j && !judge(line[i], line[j])) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) ans++;
+    }
+}
+
+void output() {
+    cout << ans << endl;
+}
+
 int main() {
-	//freopen("output.txt", "w", stdout);
-	int nCase;
+    ios::sync_with_stdio(false);
 	cin >> nCase;
 	while (nCase--) {
-		int n, ans = 0;
-		cin >> n;
-		for (int i = 0; i < n; i++) {
-			long long x1, y1, x2, y2;
-			cin >> x1 >> y1 >> x2 >> y2;
-			line[i] = Line(x1, y1, x2, y2);
-		}
-
-		for (int i = 0; i < n; i++) {
-			bool flag = false;
-			for (int j = 0; j < n; j++) {
-				if (i != j && !judge(line[i], line[j])) {
-					flag = true;
-					break;
-				}
-			}
-			if (!flag) ans++;
-		}
-		
-		cout << ans << endl;
+        init();
+        input();
+        work();
+        output();
 	}
 	return 0;
 }

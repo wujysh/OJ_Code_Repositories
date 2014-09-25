@@ -1,8 +1,10 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
 using namespace std;
+
+int nCase;
+double ansX, ansY;
 
 struct Line {
 	long long x1, y1, x2, y2, u, v;
@@ -10,7 +12,7 @@ struct Line {
 		x1 = x10;  y1 = y10;  x2 = x20;  y2 = y20;
 		u = x2 - x1;  v = y2 - y1;
 	}
-};
+} line1, line2;
 
 long long cross(Line l1, Line l2) {
 	return(l1.u*l2.v - l2.u*l1.v);
@@ -35,8 +37,6 @@ bool furtherTest(Line l1, Line l2) {  // l1:AB  l2:CD
 	return false;
 }
 
-double ansX, ansY;
-
 int judge(Line l1, Line l2) {
 	if (cross(l1, l2) == 0) {  // 平行
 		if (furtherTest(l1, l2)) {  // 重合（平行又相交）
@@ -59,28 +59,33 @@ int judge(Line l1, Line l2) {
 	}
 }
 
+void input() {
+    long long x1, y1, x2, y2, x3, y3, x4, y4;
+    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;
+
+    line1 = Line(x1, y1, x2, y2);
+    line2 = Line(x3, y3, x4, y4);
+}
+
+void output() {
+    int response = judge(line1, line2);
+    if (response == 1) {
+        cout << "POINT ";
+        cout << setprecision(2) << fixed << ansX << " " << ansY << endl;
+    } else if (response == 2) {
+        cout << "LINE" << endl;
+    } else if (response == 3) {
+        cout << "NONE" << endl;
+    }
+}
+
 int main() {
-	//freopen("output.txt", "w", stdout);
-	int nCase;
+    ios::sync_with_stdio(false);
 	cin >> nCase;
 	cout << "INTERSECTING LINES OUTPUT" << endl;
 	while (nCase--) {
-		long long x1, y1, x2, y2, x3, y3, x4, y4;
-		cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;
-
-		Line line1(x1, y1, x2, y2);
-		Line line2(x3, y3, x4, y4);
-
-		int response = judge(line1, line2);
-		if (response == 1) {
-			cout << "POINT ";
-			cout << setprecision(2) << fixed << ansX << " " << ansY << endl;
-			//printf("%.2lf %.2lf\n", ansX, ansY);
-		} else if (response == 2) {
-			cout << "LINE" << endl;
-		} else if (response == 3) {
-			cout << "NONE" << endl;
-		}
+		input();
+		output();
 	}
 	cout << "END OF OUTPUT" << endl;
 	return 0;
